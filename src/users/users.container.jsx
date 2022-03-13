@@ -3,10 +3,12 @@ import { UserItem } from "./users.item";
 import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const UsersContainer = () => {
-  const [page, setPage] = useState(window.location.pathname.replace("/",'') || 1);
-  debugger
+const loc = useLocation();
+let navigate = useNavigate();
+  const [page, setPage] = useState(loc.pathname.replace("/",'') || 1);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -27,11 +29,13 @@ export const UsersContainer = () => {
   }, []);
 
   const handleNext = () => {
+      let nextPage = `${parseInt(page,10)+1}`
       setSearch("")
       setLoading(true);
-      setPage(page+1);
-      fetchData(page+1);
-      window.history.pushState(undefined,undefined,`${page+1}`)
+      setPage(nextPage);
+      fetchData(nextPage);
+      
+      navigate(`/${nextPage}`)
   }
 
   const handleChange = (e) => {
